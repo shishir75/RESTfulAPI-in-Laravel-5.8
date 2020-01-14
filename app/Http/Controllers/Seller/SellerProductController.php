@@ -6,7 +6,7 @@ use App\Http\Controllers\ApiController;
 use App\Product;
 use App\Seller;
 use App\User;
-use HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Http\Request;
 
 class SellerProductController extends ApiController

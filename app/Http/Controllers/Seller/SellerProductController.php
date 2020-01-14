@@ -6,8 +6,8 @@ use App\Http\Controllers\ApiController;
 use App\Product;
 use App\Seller;
 use App\User;
+use HttpException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class SellerProductController extends ApiController
 {
@@ -61,9 +61,46 @@ class SellerProductController extends ApiController
      * @param  \App\Seller  $seller
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Seller $seller)
+    public function update(Request $request, Seller $seller, Product $product)
     {
-        //
+        $rules = [
+          'quantity' => 'integer|min:1',
+          'status' => 'in:'. Product::AVAILABLE_PRODUCT, ','. Product::UNAVAILABLE_PRODUCT,
+          'image' => 'image',
+        ];
+
+        $this->validate($request, $rules);
+
+        if ($seller->id == $product->seller_id)
+        {
+            $product->fill($request->only([
+                'name', 'description', 'quantity',
+            ]));
+
+            if ($request->has('status'))
+            {
+                $product->status = $request->status;
+
+                if ($product->isAvailable() && $product->categories()->count() == 0)
+                {
+                    return $this->errorResponse('An active product must have at least one category!', 409);
+                }
+            }
+
+            if ($product->isClean())
+            {
+                return $this->errorResponse('You need to specify a different value to update', 422);
+            }
+
+            $product->save();
+
+            return $this->showOne($product);
+
+        } else {
+
+            return $this->errorResponse( 'The specified seller is not the actual seller of this product! ',422 );
+        }
+
     }
 
     /**
@@ -76,4 +113,5 @@ class SellerProductController extends ApiController
     {
         //
     }
+    
 }

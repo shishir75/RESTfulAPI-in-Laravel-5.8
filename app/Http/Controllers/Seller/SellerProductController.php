@@ -16,6 +16,7 @@ class SellerProductController extends ApiController
     public function index(Seller $seller)
     {
         $products = $seller->products()->get();
+        //$products = $seller->products; // this works same as before
 
         return $this->showAll($products);
     }

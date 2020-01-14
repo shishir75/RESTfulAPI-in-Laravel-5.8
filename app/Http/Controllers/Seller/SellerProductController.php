@@ -109,9 +109,18 @@ class SellerProductController extends ApiController
      * @param  \App\Seller  $seller
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Seller $seller)
+    public function destroy(Seller $seller, Product $product)
     {
-        //
+        if ($seller->id == $product->seller_id)
+        {
+            $product->delete();
+
+            return $this->showOne($product);
+
+        } else {
+
+            return $this->errorResponse( 'The specified seller is not the actual seller of this product! ',422 );
+        }
     }
-    
+
 }

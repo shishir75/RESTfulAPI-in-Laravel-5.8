@@ -59,6 +59,6 @@ class ProductBuyerTransactionController extends ApiController
 
             return $this->showOne($transaction, 201);
         });
-        
+
     }
 }

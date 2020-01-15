@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiController;
 use App\Product;
 use App\Seller;
 use App\User;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Http\Request;
 
@@ -45,7 +46,7 @@ class SellerProductController extends ApiController
         $data = $request->all();
 
         $data['status'] = Product::UNAVAILABLE_PRODUCT;
-        $data['image'] = $request->image->store('api_img', 'public');
+        $data['image'] = $request->image->store('', 'public');
         $data['seller_id'] = $seller->id;
 
         $product = Product::create($data);
@@ -113,6 +114,7 @@ class SellerProductController extends ApiController
     {
         if ($seller->id == $product->seller_id)
         {
+            Storage::disk('public')->delete($product->image);
             $product->delete();
 
             return $this->showOne($product);

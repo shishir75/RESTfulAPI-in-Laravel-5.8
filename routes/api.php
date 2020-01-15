@@ -27,7 +27,7 @@ Route::resource('categories.buyers', 'Category\CategoryBuyerController', ['only'
 Route::resource('products', 'Product\ProductController', ['only' => ['index', 'show']]);
 Route::resource('products.transactions', 'Product\ProductTransactionController', ['only' => ['index']]);
 Route::resource('products.buyers', 'Product\ProductBuyerController', ['only' => ['index']]);
-Route::resource('products.categories', 'Product\ProductCategoryController', ['only' => ['index']]);
+Route::resource('products.categories', 'Product\ProductCategoryController', ['only' => ['index', 'update', 'destroy']]);
 Route::resource('sellers', 'Seller\SellerController', ['only' => ['index', 'show']]);
 Route::resource('sellers.transactions', 'Seller\SellerTransactionController', ['only' => ['index']]);
 Route::resource('sellers.categories', 'Seller\SellerCategoryController', ['only' => ['index']]);

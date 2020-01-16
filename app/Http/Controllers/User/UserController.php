@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Mail\UserCreated;
+use App\Mail\UserMailChange;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use Illuminate\Support\Facades\Mail;
@@ -90,6 +92,12 @@ class UserController extends ApiController
             $user->verified = User::UNVERIFIED_USER;
             $user->verification_token = User::generateVerificationCode();
             $user->email = $request->input('email');
+            $user->email_verified_at = null;
+
+            if ($user->isDirty('email'))
+            {
+                Mail::to($user)->send(new UserMailChange($user));
+            }
         }
 
         if ($request->has('password'))
@@ -138,6 +146,7 @@ class UserController extends ApiController
 
         $user->verified = User::VERIFIED_USER;
         $user->verification_token = null;
+        $user->email_verified_at = Carbon::now();
 
         $user->save();
 

@@ -1,5 +1,12 @@
-<h3>Hello {{ $user->name }}</h3>
+@component('mail::message')
+    # Hello {{ $user->name }}
 
-<h6>You change your email address. So you need to verify new email. Please verify the email from this link:</h6>
+    You change your email address. So you need to verify new email. Please verify the email from this link:
 
-<a class="btn btn-info" href="{{ route('verify', $user->verification_token) }}">Click To Verify</a>
+    @component('mail::button', ['url' =>  route("verify", $user->verification_token) ])
+        Verify Account
+    @endcomponent
+
+    Thanks,<br>
+    {{ config('app.name') }}
+@endcomponent

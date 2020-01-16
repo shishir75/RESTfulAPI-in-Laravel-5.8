@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Mail\UserCreated;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends ApiController
 {
@@ -43,6 +45,11 @@ class UserController extends ApiController
         $data['admin'] = User::REGULAR_USER;
 
         $user = User::create($data);
+
+        if ($user)
+        {
+            Mail::to($user->email)->send(new UserCreated($user));
+        }
 
         return $this->showOne($user, 201);
     }

@@ -8,6 +8,11 @@ use App\Http\Controllers\ApiController;
 
 class TransactionCategoryController extends ApiController
 {
+    public function __construct()
+    {
+        $this->middleware('client.credentials')->only(['index']);
+    }
+
     public function index(Transaction $transaction)
     {
         $categories = $transaction->product->categories;

@@ -8,6 +8,11 @@ use App\Http\Controllers\ApiController;
 
 class BuyerProductController extends ApiController
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index(Buyer $buyer)
     {
         $products = $buyer->transactions()->with('product')->get()->pluck('product');

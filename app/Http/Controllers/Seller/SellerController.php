@@ -16,13 +16,11 @@ class SellerController extends ApiController
         $this->middleware('can:view,seller')->only('show');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
+        $this->allowedAdminAction(); // gate
+
         $sellers = Seller::has('products')->get();
         // $sellers = Seller::all();  // same
 

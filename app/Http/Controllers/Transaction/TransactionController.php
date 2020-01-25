@@ -16,13 +16,11 @@ class TransactionController extends ApiController
         $this->middleware('can:view,transaction')->only('show');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
+        $this->allowedAdminAction(); // gate
+
         $transactions = Transaction::all();
 
         return $this->showAll($transactions);

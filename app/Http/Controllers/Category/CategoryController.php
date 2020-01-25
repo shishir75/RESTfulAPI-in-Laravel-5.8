@@ -29,14 +29,11 @@ class CategoryController extends ApiController
         return $this->showAll($categories);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
+        $this->allowedAdminAction(); // gate
+
         $rules = [
           'name' => 'required',
           'description' => 'required',
@@ -61,15 +58,10 @@ class CategoryController extends ApiController
     }
 
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Category $category)
     {
+        $this->allowedAdminAction(); // gate
+
         $category->fill($request->only([
             'name',
             'description',
@@ -85,14 +77,11 @@ class CategoryController extends ApiController
         return $this->showOne($category);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(Category $category)
     {
+        $this->allowedAdminAction(); // gate
+
         $category->delete();
 
         return $this->showOne($category);

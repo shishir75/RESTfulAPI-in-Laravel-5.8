@@ -27,13 +27,11 @@ class UserController extends ApiController
         $this->middleware('can:delete,user')->only('destroy');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
+        $this->allowedAdminAction(); // gate
+
         $users = User::all();
 
         return $this->showAll($users);
@@ -84,13 +82,7 @@ class UserController extends ApiController
         return $this->showOne($user);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param User $user
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, User $user)
     {
         $rules = [
@@ -126,6 +118,8 @@ class UserController extends ApiController
 
         if ($request->has('admin'))
         {
+            $this->allowedAdminAction(); // gate
+
             if (!$user->isVerified())
             {
                 return $this->errorResponse('Only verified users can modify the admin filed!', 409);

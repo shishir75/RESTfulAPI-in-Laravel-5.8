@@ -13,13 +13,11 @@ class ProductBuyerController extends ApiController
         parent::__construct();
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(Product $product)
     {
+        $this->allowedAdminAction(); // gate
+
         $buyers = $product->transactions()
             ->with('buyer')
             ->get()

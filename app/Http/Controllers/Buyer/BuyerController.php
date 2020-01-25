@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Buyer;
 
 use App\Buyer;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use Illuminate\Support\Facades\Gate;
 
 class BuyerController extends ApiController
 {
@@ -16,13 +18,11 @@ class BuyerController extends ApiController
         $this->middleware('can:view,buyer')->only('show');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
+        $this->allowedAdminAction(); // gate
+
         //$buyers = Buyer::has('transactions')->get();
 
         $buyers = Buyer::all();
@@ -31,12 +31,6 @@ class BuyerController extends ApiController
     }
 
 
-    /**
-     * Display the specified resource.
-     *
-     * @param Buyer $buyer
-     * @return \Illuminate\Http\Response
-     */
     public function show(Buyer $buyer)
     {
         //$buyer = Buyer::has('transactions')->findOrFail($id);

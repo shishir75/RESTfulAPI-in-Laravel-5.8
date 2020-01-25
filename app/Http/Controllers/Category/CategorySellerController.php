@@ -13,13 +13,10 @@ class CategorySellerController extends ApiController
         parent::__construct();
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Category $category)
     {
+        $this->allowedAdminAction(); // gate
+
         $sellers = $category->products()->with('seller')->get()->pluck('seller')->unique()->values();
 
         return $this->showAll($sellers);

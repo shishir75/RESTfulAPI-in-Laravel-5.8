@@ -12,13 +12,12 @@ class CategoryTransactionController extends ApiController
     {
         parent::__construct();
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function index(Category $category)
     {
+        $this->allowedAdminAction(); // gate
+
         $transactions = $category->products()
             ->whereHas('transactions')
             ->with('transactions')
